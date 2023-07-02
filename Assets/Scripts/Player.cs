@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _rotationSpeed = 3.0f;
+    [SerializeField] float _rotationSpeed = 3.0f;
+    [SerializeField] ParticleSystem _diedParticle;
     
     Rigidbody2D _rigidBody2D;
     
@@ -13,7 +14,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         _rigidBody2D = GetComponent<Rigidbody2D>();
-        if (_rigidBody2D) 
+        if (!_rigidBody2D) 
         {
             Debug.LogError("Missing game component: RigidBody2D");
         }
@@ -35,7 +36,13 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Ground"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            _diedParticle.Play();
+            Invoke("ReloadScene", 1.0f);
         }
+    }
+    
+    void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

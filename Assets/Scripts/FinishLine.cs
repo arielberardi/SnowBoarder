@@ -5,11 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class FinishLine : MonoBehaviour
 {    
-    [SerializeField] private float _restartDelay = 1.0f;
+    [SerializeField] float _restartDelay = 1.0f;
+    [SerializeField] ParticleSystem _victoryParticle;
+    
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player"))
         {
             Invoke("ReloadScene", _restartDelay);
+            _victoryParticle.Play();
         }
     }
     
